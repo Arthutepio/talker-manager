@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { readFile } = require('./utils/fs/readFile');
+// const idMiddleware = require('./middlewares/idMiddlewares');
 
 const filePath = path.resolve('src', 'talker.json');
 
@@ -15,12 +16,25 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (_request, response) => {
+app.get('/talker', async (_req, res) => {
   const dataTalker = await readFile(filePath);
   if (!dataTalker) {
-    return response.status(HTTP_OK_STATUS).json([]);
+    return res.status(HTTP_OK_STATUS).json([]);
   } 
-  return response.status(HTTP_OK_STATUS).json(dataTalker);
+  return res.status(HTTP_OK_STATUS).json(dataTalker);
+});
+
+app.get('/talker/:id', async (req, res) => {
+  try {
+    const dataTalker = await readFile(filePath);
+    const result = dataTalker.find(({ id }) => id === Number(req.params.id));
+    if (result) {
+      return res.status(200).json(result);
+    }
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 app.listen(PORT, () => {
