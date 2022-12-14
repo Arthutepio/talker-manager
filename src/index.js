@@ -17,9 +17,10 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', async (_request, response) => {
   const dataTalker = await readFile(filePath);
-  console.log('ok', dataTalker);
-  
-  response.status(HTTP_OK_STATUS).send(dataTalker);
+  if (!dataTalker) {
+    return response.status(HTTP_OK_STATUS).json([]);
+  } 
+  return response.status(HTTP_OK_STATUS).json(dataTalker);
 });
 
 app.listen(PORT, () => {
