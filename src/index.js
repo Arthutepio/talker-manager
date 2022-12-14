@@ -1,4 +1,8 @@
 const express = require('express');
+const path = require('path');
+const { readFile } = require('./utils/fs/readFile');
+
+const filePath = path.resolve('src', 'talker.json');
 
 const app = express();
 app.use(express.json());
@@ -11,9 +15,12 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.post('/talker', (req, res) => {
-  res.status(200).json()
-})
+app.get('/talker', async (_request, response) => {
+  const dataTalker = await readFile(filePath);
+  console.log('ok', dataTalker);
+  
+  response.status(HTTP_OK_STATUS).send(dataTalker);
+});
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
