@@ -11,6 +11,10 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.post('/talker', (req, res) => {
+  res.status(200).json()
+})
+
 app.listen(PORT, () => {
-  console.log('Iniciando projeto');
+  console.log(`server running on port ${PORT}`);
 });
