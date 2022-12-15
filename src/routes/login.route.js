@@ -1,5 +1,5 @@
 const express = require('express');
-const { validateLogin } = require('../middlewares/validateLogin.middleware.js');
+const { validateLogin } = require('../middlewares/validateLoginMiddleware');
 const { generateId } = require('../utils/identifiers/generateId');
 
 const loginRoute = express.Router();
