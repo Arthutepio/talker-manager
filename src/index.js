@@ -3,6 +3,7 @@ const path = require('path');
 const { readFile } = require('./utils/fs/readFile');
 
 const loginRoute = require('./routes/login.route');
+const talkerRoute = require('./routes/talker.route');
 
 const filePath = path.resolve('src', 'talker.json');
 
@@ -39,6 +40,7 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.use('/login', loginRoute);
+app.use('/talker', talkerRoute);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
