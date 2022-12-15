@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const { readFile } = require('./utils/fs/readFile');
-// const idMiddleware = require('./middlewares/idMiddlewares');
+
+const loginRoute = require('./routes/login.route');
 
 const filePath = path.resolve('src', 'talker.json');
 
@@ -37,9 +38,7 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
-
-});
+app.use('/login', loginRoute);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
