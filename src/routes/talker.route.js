@@ -6,6 +6,9 @@ const { writeFile } = require('../utils/fs/writeFile');
 const authorizationMiddleware = require('../middlewares/authorizationMiddleware');
 const validateNameMiddleware = require('../middlewares/valitdateNameMiddleware');
 const validateAgeMiddleware = require('../middlewares/validateAgeMeddleware');
+const validateTalkMiddleware = require('../middlewares/validateTalkMeddleware');
+const validateWatchedAtMeddleware = require('../middlewares/validateWatchedAtMeddleware');
+const validateRateMiddleware = require('../middlewares/validateRateMiddleware');
 
 const talkerRoute = express.Router();
 
@@ -33,7 +36,8 @@ talkerRoute.get('/:id', async (req, res) => {
 });
 
 talkerRoute.post('/', authorizationMiddleware,
-  validateNameMiddleware, validateAgeMiddleware, async (req, res) => {
+  validateNameMiddleware, validateAgeMiddleware,
+  validateTalkMiddleware, validateWatchedAtMeddleware, validateRateMiddleware, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   // const id = generateId();
   // console.log(id);
