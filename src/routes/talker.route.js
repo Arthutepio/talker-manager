@@ -1,13 +1,13 @@
 const express = require('express');
 const path = require('path');
-const { generateId } = require('../utils/identifiers/generateId');
+const talker = require('../talker.json');
 const { readFile } = require('../utils/fs/readFile');
 const { writeFile } = require('../utils/fs/writeFile');
 const authorizationMiddleware = require('../middlewares/authorizationMiddleware');
 const validateNameMiddleware = require('../middlewares/valitdateNameMiddleware');
-const validateAgeMiddleware = require('../middlewares/validateAgeMeddleware');
-const validateTalkMiddleware = require('../middlewares/validateTalkMeddleware');
-const validateWatchedAtMeddleware = require('../middlewares/validateWatchedAtMeddleware');
+const validateAgeMiddleware = require('../middlewares/validateAgeMiddleware');
+const validateTalkMiddleware = require('../middlewares/validateTalkMiddliware');
+const validateWatchedAtMiddleware = require('../middlewares/validateWatchedAtMiddleware');
 const validateRateMiddleware = require('../middlewares/validateRateMiddleware');
 
 const talkerRoute = express.Router();
@@ -15,7 +15,7 @@ const talkerRoute = express.Router();
 const filePath = path.resolve('src', 'talker.json');
 
 talkerRoute.get('/', async (_req, res) => {
-  const dataTalker = await readFile(filePath);
+  const dataTalker = await readFile(filePath, 'utf-8');
   if (!dataTalker) {
     return res.status(200).json([]);
   } 
@@ -24,7 +24,7 @@ talkerRoute.get('/', async (_req, res) => {
 
 talkerRoute.get('/:id', async (req, res) => {
   try {
-    const dataTalker = await readFile(filePath);
+    const dataTalker = await readFile(filePath, 'utf-8');
     const result = dataTalker.find(({ id }) => id === Number(req.params.id));
     if (result) {
       return res.status(200).json(result);
@@ -37,11 +37,13 @@ talkerRoute.get('/:id', async (req, res) => {
 
 talkerRoute.post('/', authorizationMiddleware,
   validateNameMiddleware, validateAgeMiddleware,
-  validateTalkMiddleware, validateWatchedAtMeddleware, validateRateMiddleware, async (req, res) => {
+  validateTalkMiddleware, validateWatchedAtMiddleware, 
+  validateRateMiddleware, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   // const id = generateId();
   // console.log(id);
   const newUser = {
+    id: talker.length + 1,
     name,
     age,
     talk: {
@@ -49,10 +51,11 @@ talkerRoute.post('/', authorizationMiddleware,
       rate,
     },
   };
-  const user = await readFile(filePath);
+  const user = await readFile(filePath, 'utf-8');
+  console.log(user);
   user.push(newUser);
   await writeFile(user, filePath);
-  res.status(200).json({ token: generateId() });
+  res.status(201).json(newUser); 
 });
 
 module.exports = talkerRoute;
