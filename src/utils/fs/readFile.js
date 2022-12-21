@@ -6,7 +6,6 @@ const readFile = async (path) => {
     return JSON.parse(dataTalker);
   } catch (error) {
     console.log(error.massage);
-    // console.log('deu ruim');
     return false;
   }
 };
