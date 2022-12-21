@@ -78,4 +78,14 @@ validateRateMiddleware, async (req, res) => {
   res.status(200).json(editedUser);
 });
 
+talkerRoute.delete('/:id', authorizationMiddleware,
+ async (req, res) => {
+  const users = await readFile(filePath);
+  const { id } = req.params;
+  const user = users.filter((person) => person.id !== Number(id));
+  console.log(user);
+  await writeFile(user, filePath);
+  res.status(204).json();
+});
+
 module.exports = talkerRoute;
