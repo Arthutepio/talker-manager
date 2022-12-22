@@ -14,7 +14,7 @@ const talkerRoute = express.Router();
 
 const filePath = path.resolve('src', 'talker.json');
 
-talkerRoute.get('/', async (_req, res) => {
+talkerRoute.get('/talker', async (_req, res) => {
   const dataTalker = await readFile(filePath);
   if (!dataTalker) {
     return res.status(200).json([]);
@@ -22,7 +22,7 @@ talkerRoute.get('/', async (_req, res) => {
   return res.status(200).json(dataTalker);
 });
 
-talkerRoute.get('/:id', async (req, res) => {
+talkerRoute.get('/talker/:id', async (req, res) => {
   try {
     const dataTalker = await readFile(filePath);
     const result = dataTalker.find(({ id }) => id === Number(req.params.id));
@@ -35,7 +35,7 @@ talkerRoute.get('/:id', async (req, res) => {
   }
 });
 
-talkerRoute.post('/', authorizationMiddleware,
+talkerRoute.post('/talker', authorizationMiddleware,
   validateNameMiddleware, validateAgeMiddleware,
   validateTalkMiddleware, validateWatchedAtMiddleware, 
   validateRateMiddleware, async (req, res) => {
@@ -55,7 +55,7 @@ talkerRoute.post('/', authorizationMiddleware,
   res.status(201).json(newUser); 
 });
 
-talkerRoute.put('/:id', authorizationMiddleware,
+talkerRoute.put('/talker/:id', authorizationMiddleware,
 validateNameMiddleware, validateAgeMiddleware,
 validateTalkMiddleware, validateWatchedAtMiddleware,
 validateRateMiddleware, async (req, res) => {
@@ -78,7 +78,7 @@ validateRateMiddleware, async (req, res) => {
   res.status(200).json(editedUser);
 });
 
-talkerRoute.delete('/:id', authorizationMiddleware,
+talkerRoute.delete('/talker/:id', authorizationMiddleware,
  async (req, res) => {
   const users = await readFile(filePath);
   const { id } = req.params;
